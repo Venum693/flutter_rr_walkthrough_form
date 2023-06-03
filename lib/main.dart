@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 
 
@@ -30,57 +31,26 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   PageController pageController = PageController();
-  int currentIndex = 0;
-  onchanged(int index) {
-    setState(() {
-      currentIndex =index;
-    });
+  bool isLastPage = false;
+
+
+  @override
+
+  void dispose(){
+    pageController.dispose();
+    super.dispose();
   }
-
-  List onBoardingData = [
-  {
-  "image": 'assets/images/welcome.png',
-  "title": 'Welcome',
-  "description1": "Explore & Connect With Bikers Community",
-    "description2": "Around The World.",
-  "description3": ""
-  },
-    {
-
-      "image": 'assets/images/plan_rides.png',
-      "title": 'Plan Rides',
-      "description1": "Plan Rides With Fellow Riders To Create",
-      "description2":   "A Bike Ride.",
-      "description3": ""
-    },
-    {
-     "image": 'assets/images/get_sponsorship.png',
-      "title": 'Get Sponsorships',
-      "description1": "Connect Sponsors To Get Sponsorship ",
-      "description2": "Ride Or Club.",
-      "description3": ""
-    },
-
-    {
-      "image": 'assets/images/share_experience.png',
-      "title": 'Share experience',
-      "description1": "Share Experiences By Showcasing Your ",
-      "description2":  "Current Or Previous Rides In The Form ",
-    "description3": "Of Images. "
-
-    }
-  ];
 
   @override
   Widget build(BuildContext context) {
 
     var screenwidth= MediaQuery.of(context).size.width;
-    var screenheight = MediaQuery.of(context).size.height*0.01358;
+    var screenheight = MediaQuery.of(context).size.height*0.1859;
 
     print("width - $screenwidth and height - $screenheight");
 
     return Scaffold(
-      appBar: AppBar(flexibleSpace: Container(width: 5,),
+      appBar: AppBar(
         title: Text('REAL  ROADIES', style: GoogleFonts.poppins(
             letterSpacing: 5,
           fontSize: 16, fontWeight: FontWeight.w700,color: Color(0xffF2F2F2),
@@ -90,118 +60,128 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
       ),
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          PageView.builder(
-            scrollDirection: Axis.horizontal,
-            controller: pageController,
-            itemCount: onBoardingData.length,
-            onPageChanged: onchanged,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SizedBox(
-                        height: 270,width: 270,
-                        child: Image.asset(onBoardingData[index]['image'],)),
-                  ),
+      body: Container(
+        padding: EdgeInsets.only(bottom: 110),
+        child: PageView(
+          controller: pageController,
+          onPageChanged: (index){
+            setState(() => isLastPage = index==3);
+          },
+          children: [
+            buildpage(image: 'assets/images/welcome.png',
+                title: 'Welcome',
+                subtitle: 'Explore & Connect With Bikers Community Around The World.'),
+            buildpage(
+                image: 'assets/images/plan_rides.png',
+                title: 'Plan Rides',
+                subtitle: "Plan Rides With Fellow Riders To Create A Bike Ride."),
+            buildpage(
+                image: 'assets/images/get_sponsorship.png',
+                title: 'Get Sponsorships',
+                subtitle: "Connect Sponsors To Get Sponsorship Ride Or Club."),
+            buildpage(
+                image: 'assets/images/share_experience.png',
+                title: 'Share experience',
+                subtitle: "Share Experiences By Showcasing Your Current Or Previous Rides In The Form Of Images.")
 
-                 // SizedBox(height: MediaQuery.of(context).size.height*0.1015,),
 
-                  Text(onBoardingData[index]['title'],
-                  style: GoogleFonts.poppins(fontSize: 20,
-                    fontWeight: FontWeight.w500,color: Color(0xffFFFFFF)),),
+          ],
+        ),
+      ),
+      bottomSheet: Container(
+        color: Colors.black,
+        height: MediaQuery.of(context).size.height*0.1859,
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SmoothPageIndicator(
+                  controller: pageController,
+                  count: 4,
+                effect: const ExpandingDotsEffect(
+                  activeDotColor: Colors.yellow,
+                  spacing: 10,
+                  dotHeight: 15,
+                  dotWidth: 15
+                ),
+                  onDotClicked: (index) => pageController.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeIn),
+                ),
 
-                  SizedBox(height: MediaQuery.of(context).size.height*0.0288,),
+                CircleAvatar(
+                  backgroundColor: Colors.yellow,
+                  radius: 20,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_forward_ios_sharp),
+                    onPressed: () {
+                      pageController.nextPage(
+                          duration: Duration(milliseconds: 100),
+                          curve: Curves.bounceIn);
 
-                 Text(onBoardingData[index]['description1'],
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xffFFFFFF).withOpacity(0.6),),),
-
-                  Text(onBoardingData[index]['description2'],
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xffFFFFFF).withOpacity(0.6),),),
-                  Text(onBoardingData[index]['description3'],
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xffFFFFFF).withOpacity(0.6),),),
-
-                  SizedBox(height: 8,),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: List.generate(
-
-                              growable: true,
-                                onBoardingData.length, (index) => buildDot(index, context),
-
-                            ),
-                          ),
-                        ),
-                        CircleAvatar(
-                          backgroundColor: Colors.yellow,
-                          radius: 20,
-                          child: IconButton(
-                            icon: Icon(Icons.arrow_forward_ios_sharp),
-                            onPressed: () {
-                                 if(currentIndex == onBoardingData.length - 1){
-                                 Navigator.pushReplacement(context,
-                                   MaterialPageRoute(builder: (context)=> Openpage()),);
-                            }
-                              pageController.nextPage(duration: Duration(milliseconds: 100), curve: Curves.bounceIn);
-                            },
-                            iconSize: 20,
-                            color: Colors.black,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height*0.01358,),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: TextButton(
-                        onPressed: (){
+                      if(isLastPage == true)
+                        {
                           Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context)=> Openpage()));
-                        },
-                        child: Text('Skip',
-                          style: GoogleFonts.poppins(fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w400,fontSize: 12,color: Color.fromRGBO(255, 255, 255, 0.6)),)),
-                  )
-                ],
-
-              );
-            },
-          )
-        ],
+                            MaterialPageRoute(builder: (context)=> Openpage()),);
+                        }
+                    },
+                    iconSize: 20,
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: TextButton(
+                      onPressed: (){
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context)=> Openpage()));
+                      },
+                      child: Text('Skip',
+                        style: GoogleFonts.poppins(fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w400,fontSize: 12,color: Color(0xffFFFFFF).withOpacity(0.6)),)),
+                )
+              ],
+            )
+          ],
+        ),
       ),
+
     );
   }
 
- Container buildDot(int index, BuildContext context) {
-    return Container(
-      height: 10,
-      width: currentIndex == index ? 20 : 10,
-      margin: EdgeInsets.only(right: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: currentIndex == index ? Colors.yellow : Colors.grey,
-      ),
-    );
-  }
+ Widget buildpage({
+    required String image,
+   required String title,
+   required String subtitle
+ }) => Container(
+   child: Column(
+     mainAxisAlignment: MainAxisAlignment.center,
+     children: [
+       SizedBox(height: MediaQuery.of(context).size.width/1.8,
+           width: MediaQuery.of(context).size.height*0.3379,
+           child: Image.asset(image,fit: BoxFit.cover,width: double.infinity)),
+       SizedBox(height: MediaQuery.of(context).size.height*0.1015,),
+       Text(title,style: GoogleFonts.poppins(fontSize: 20,
+           fontWeight: FontWeight.w500,color: Color(0xffFFFFFF)),),
+       SizedBox(height: MediaQuery.of(context).size.height*0.0287,),
+       Container(
+         padding: EdgeInsets.symmetric(horizontal: 17),
+         child: Text(subtitle, textAlign: TextAlign.center,style: GoogleFonts.poppins(fontSize: 16,
+           fontWeight: FontWeight.w400,
+           color: Color(0xffFFFFFF).withOpacity(0.6),)),
+       )
+
+
+     ],
+   ),
+ );
 }
 
 class Openpage extends StatefulWidget {
