@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
 
     var screenwidth= MediaQuery.of(context).size.width;
-    var screenheight = MediaQuery.of(context).size.height*0.1859;
+    var screenheight = MediaQuery.of(context).size.height*0.0287;
 
     print("width - $screenwidth and height - $screenheight");
 
@@ -60,38 +60,41 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
       ),
       backgroundColor: Colors.black,
-      body: Container(
-        padding: EdgeInsets.only(bottom: 110),
-        child: PageView(
-          controller: pageController,
-          onPageChanged: (index){
-            setState(() => isLastPage = index==3);
-          },
-          children: [
-            buildpage(image: 'assets/images/welcome.png',
-                title: 'Welcome',
-                subtitle: 'Explore & Connect With Bikers Community Around The World.'),
-            buildpage(
-                image: 'assets/images/plan_rides.png',
-                title: 'Plan Rides',
-                subtitle: "Plan Rides With Fellow Riders To Create A Bike Ride."),
-            buildpage(
-                image: 'assets/images/get_sponsorship.png',
-                title: 'Get Sponsorships',
-                subtitle: "Connect Sponsors To Get Sponsorship Ride Or Club."),
-            buildpage(
-                image: 'assets/images/share_experience.png',
-                title: 'Share experience',
-                subtitle: "Share Experiences By Showcasing Your Current Or Previous Rides In The Form Of Images.")
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Container(
+          padding: EdgeInsets.only(bottom: 110),
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (index){
+              setState(() => isLastPage = index==3);
+            },
+            children: [
+              buildpage(image: 'assets/images/welcome2.png',
+                  title: 'Welcome',
+                  subtitle: 'Explore & Connect With Bikers Community Around The World.'),
+              buildpage(
+                  image: 'assets/images/planrides2.png',
+                  title: 'Plan Rides',
+                  subtitle: "Plan Rides With Fellow Riders To Create A Bike Ride."),
+              buildpage(
+                  image: 'assets/images/get_sponsorship2.png',
+                  title: 'Get Sponsorships',
+                  subtitle: "Connect Sponsors To Get Sponsorship Ride Or Club."),
+              buildpage(
+                  image: 'assets/images/share_experience2.png',
+                  title: 'Share experience',
+                  subtitle: "Share Experiences By Showcasing Your Current Or Previous Rides In The Form Of Images.")
 
 
-          ],
+            ],
+          ),
         ),
       ),
       bottomSheet: Container(
         color: Colors.black,
         height: MediaQuery.of(context).size.height*0.1859,
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
         child: Column(
           children: [
             Row(
@@ -134,20 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
               ],
             ),
-            Row(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: TextButton(
-                      onPressed: (){
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context)=> Openpage()));
-                      },
-                      child: Text('Skip',
-                        style: GoogleFonts.poppins(fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w400,fontSize: 12,color: Color(0xffFFFFFF).withOpacity(0.6)),)),
-                )
-              ],
+            Align(
+              alignment: Alignment.topLeft,
+              child: TextButton(
+                  onPressed: (){
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context)=> Openpage()));
+                  },
+                  child: Text('Skip',textScaleFactor: 1,
+                    style: GoogleFonts.poppins(fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w400,fontSize: 14,color: Color(0xffFFFFFF).withOpacity(0.6)),)),
             )
           ],
         ),
@@ -162,18 +161,18 @@ class _MyHomePageState extends State<MyHomePage> {
    required String subtitle
  }) => Container(
    child: Column(
-     mainAxisAlignment: MainAxisAlignment.center,
+     mainAxisAlignment: MainAxisAlignment.start,
      children: [
-       SizedBox(height: MediaQuery.of(context).size.width/1.8,
-           width: MediaQuery.of(context).size.height*0.3379,
-           child: Image.asset(image,fit: BoxFit.cover,width: double.infinity)),
-       SizedBox(height: MediaQuery.of(context).size.height*0.1015,),
+       SizedBox(height: MediaQuery.of(context).size.height*0.0675,),
+       Image.asset(image,fit: BoxFit.cover,),
+       SizedBox(height: MediaQuery.of(context).size.height*0.101859,),
        Text(title,style: GoogleFonts.poppins(fontSize: 20,
-           fontWeight: FontWeight.w500,color: Color(0xffFFFFFF)),),
+           fontWeight: FontWeight.w500,color: Color(0xffFFFFFF)),textScaleFactor: 1),
+       //SizedBox(height: MediaQuery.of(context).size.height*0.0287,),
        SizedBox(height: MediaQuery.of(context).size.height*0.0287,),
        Container(
          padding: EdgeInsets.symmetric(horizontal: 17),
-         child: Text(subtitle, textAlign: TextAlign.center,style: GoogleFonts.poppins(fontSize: 16,
+         child: Text(textScaleFactor: 1,subtitle, textAlign: TextAlign.center,style: GoogleFonts.poppins(fontSize: 16,
            fontWeight: FontWeight.w400,
            color: Color(0xffFFFFFF).withOpacity(0.6),)),
        )
